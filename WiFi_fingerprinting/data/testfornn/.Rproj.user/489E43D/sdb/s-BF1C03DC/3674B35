@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "## 160930\n## Made by Dayoung Lee\n## data rearrange for NN\n## 1. arrange levels\n## 2. value\n\n## input data\nte_data <- read.csv(\"5Act_Var_Te1_JH_Wifi_raw_complete.csv\", header=FALSE)\ntr_data <- read.csv(\"5Act_Var_Tr1_JH_Wifi_raw_complete.csv\", header=FALSE)\n\n\n## tr_ap_nlev : number of ap from training data\n## te_ap_nlev : .. from testing data\n## tr_ap_lev : list of ap from trining data\n## te_ap_lev : list of ap from test data\n## all_ap_nlev : totla number of ap from trining & testing data\n## all_ap_lev : total list of ap from training & testing data\n\ntr_ap_nlev <- nlevels(tr_data$V3)\ntr_ap_lev <- levels(tr_data$V3)\nte_ap_nlev <- nlevels(te_data$V3)\nte_ap_lev <- levels(te_data$V3)\nall_ap_nlev <- nlevels(factor(union(tr_data$V3,te_data$V3)))\nall_ap_lev <- levels(factor(union(tr_data$V3,te_data$V3)))\n\nmax_length <- 0\n\n## for loop for counting max length of sub_tr_data\n## subset_tr_data : get one colume which is 4th having rssi value\nfor(i in 1:tr_ap_nlev){\n  subset_tr_data <- tr_data[tr_data$V3==tr_ap_lev[i],4]\n  max_length[i] <- length(subset_tr_data)\n}\n\n## for loop for binding subset_tr_data\nfor(i in 1:tr_ap_nlev){\n  subset_tr_data <- tr_data[tr_data$V3==tr_ap_lev[i],4]\n  print(length(subset_tr_data))\n\n  if(i==1)\n    total <- subset_tr_data\n  else{\n    length(subset_tr_data) <- max(max_length)\n    total <- cbind(total,subset_tr_data)\n  }\n}\n\n## give colnames\ncolnames(total) <- c(1:ncol(total))\n\n## wirte total table to csv file\nwrite.csv(total,file = \"total.csv\")\n\n\n## extra information\n## not use\ntr_appear <- all_ap_lev %in% tr_ap_lev\nte_appear <- all_ap_lev %in% te_ap_lev\ntable_appear <- data.frame(cbind(all_ap_lev,tr_appear,te_appear))\n",
+    "created" : 1475226508794.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "235044731",
+    "id" : "3674B35",
+    "lastKnownWriteTime" : 1475226562,
+    "last_content_update" : 1475226562829,
+    "path" : "C:/Users/DaYoung/Desktop/testfornn/R/testfornn.R",
+    "project_path" : "R/testfornn.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : true,
+    "source_window" : "",
+    "type" : "r_source"
+}
